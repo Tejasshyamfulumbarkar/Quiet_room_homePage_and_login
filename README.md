@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quiet Room
+
+**Quiet Room** is a digital environment designed to facilitate focus, goal tracking, and deep work. This application provides a calm, distraction-free space for users to enhance productivity and manage their tasks effectively.
+
+---
+
+## Tech Stack
+
+This project is built with a modern, performant, and scalable technology stack:
+
+* **Framework:** [Next.js](https://nextjs.org/) (React Framework)
+* **Styling:** [Styled Components](https://styled-components.com/) (CSS-in-JS)
+* **Language:** TypeScript
+
+---
+
+## Current Development Status
+
+The project is currently in the initial phase of development. The primary focus is on building the core user-facing pages.
+
+### Current Objectives:
+* [x] Project Setup and Configuration
+* [ ] **Homepage Implementation:** Develop the primary landing page.
+* [ ] **Authentication Flow:** Implement the user Login and Signup pages.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running, please follow these simple steps.
 
-```bash
+### Prerequisites
+
+Ensure you have Node.js (version 18.x or later) and npm installed on your machine.
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```sh
+    git clone [https://github.com/Tejasshyamfulumbarkar/Quiet_room_homePage_and_login.git](https://github.com/Tejasshyamfulumbarkar/Quiet_room_homePage_and_login.git)
+    ```
+
+2.  **Navigate to the project directory:**
+    ```sh
+    cd Quiet_room_homePage_and_login
+    ```
+
+3.  **Install NPM packages:**
+    ```sh
+    npm install
+    ```
+
+### Running the Application
+
+To start the development server, run the following command:
+
+```sh
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
