@@ -1,207 +1,287 @@
 // src/components/HeroSection.tsx
-// This marks the component as a Client Component, allowing it to use state, effects, and event listeners.
-'use client';
+'use an client';
 
 // --- Dependency Imports ---
-// Import 'styled' from styled-components for creating CSS-in-JS components.
 import styled from 'styled-components';
-// Import the 'Image' component from Next.js for optimized image handling.
 import Image from 'next/image';
-// Import a specific font, 'Zen_Dots', from Google Fonts via next/font.
 import { Zen_Dots } from 'next/font/google';
 
 // --- Font Instantiation ---
-// Initialize the Zen_Dots font with specific settings.
 const zenDots = Zen_Dots({
-  weight: '400',   // Set the font weight to normal.
-  subsets: ['latin'], // Specify the character subset to include.
+  weight: '400',
+  subsets: ['latin'],
 });
 
 // --- Styled Components ---
-// This section defines all the styled-components used to build the hero section UI.
 
-/**
- * The main container for the entire hero section.
- * It uses a flexbox layout to center its three columns (left, middle, right).
- */
 const HeroContainer = styled.section`
-  display: flex;         // Use flexbox for layout.
-  flex-direction: row;   // Arrange children horizontally.
-  align-items: center;   // Vertically center the columns.
-  justify-content: center; // Horizontally center the columns.
-  padding: 0 2rem;       // Add horizontal padding.
-  gap: 2rem;             // Space between the columns.
-  position: relative;    // Set position context for absolute children.
-  flex-grow: 1;          // Allow the section to fill available vertical space in its parent.
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  overflow-x: hidden;
+
+  // --- Mobile Responsiveness ---
+  @media (max-width: 992px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2rem 1rem;
+    gap: 0;
+    min-height: 100dvh;
+  }
 `;
 
-/**
- * A container for the content on the left side of the central image.
- */
+// --- DESKTOP-ONLY COMPONENTS ---
+// Hide the original columns on mobile
 const LeftColumn = styled.div`
   display: flex;
-  flex-direction: column; // Stack children vertically.
-  align-items: center;    // Center children horizontally.
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  gap: 1.5rem;            // Space between child elements.
+  gap: 1.5rem;
   position: relative;
-  bottom: 60px;           // Shift the entire column upwards for visual alignment.
+  bottom: 60px;
+
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
-/**
- * A container for the content on the right side of the central image.
- */
 const RightColumn = styled.div`
   display: flex;
-  flex-direction: column; // Stack children vertically.
-  align-items: center;    // Center children horizontally.
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  gap: 1.5rem;            // Space between child elements.
+  gap: 1.5rem;
   position: relative;
-  bottom: 60px;           // Shift the entire column upwards for visual alignment.
+  bottom: 60px;
+
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
-/**
- * A container specifically for the central hero image to control its size and positioning.
- */
+// --- MOBILE-ONLY COMPONENTS ---
+// Container for "Quiet Room" heading on mobile
+const MobileHeadingsContainer = styled.div`
+  display: none; // Hidden on desktop
+  @media (max-width: 992px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    order: 1; // Appears first
+  }
+`;
+
+// Container for the bottom section on mobile
+const MobileBottomContainer = styled.div`
+  display: none; // Hidden on desktop
+  @media (max-width: 992px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    order: 3; // Appears last
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 2rem;
+  }
+`;
+
+// Rows for the 2-column grid layout on mobile
+const MobileGridRow = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+`;
+
+
+// --- SHARED COMPONENTS (STYLED FOR BOTH DESKTOP & MOBILE) ---
+
 const HeroImageContainer = styled.div`
   width: 711px;
   height: 711px;
-  position: relative; // Required for Next.js Image with layout="fill".
+  position: relative;
+
+  @media (max-width: 1200px) {
+    width: 500px;
+    height: 500px;
+  }
+
+  @media (max-width: 992px) {
+    order: 2; // Image is in the middle on mobile
+    width: 70%;
+    max-width: 300px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: 2rem 0;
+  }
 `;
 
-/**
- * The main heading text (e.g., "Quiet" and "Room").
- */
 const MainHeading = styled.h1`
   font-size: 100px;
-  line-height: 100%; // Keep line height tight.
-  margin: 0;         // Remove default margin.
+  line-height: 1;
+  margin: 0;
+
+  @media (max-width: 1200px) {
+    font-size: 72px;
+  }
+  @media (max-width: 992px) {
+    font-size: 64px;
+  }
+  @media (max-width: 480px) {
+    font-size: 52px;
+  }
 `;
 
-/**
- * The subheading text (the quotes).
- * It accepts a boolean prop `$isRight` to apply different positioning styles.
- */
 const Subheading = styled.p<{ $isRight?: boolean }>`
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 400;
   font-size: 24px;
   line-height: 1.2;
-  max-width: 300px;  // Constrain width to encourage text wrapping.
+  max-width: 300px;
   margin: 0;
-  position: relative; // Enable positioning with top/left/right.
-  
-  /* Conditionally apply styles based on the $isRight prop */
+
+  /* Desktop-only positioning */
+  position: relative;
   ${({ $isRight }) => $isRight ? `
-    /* Styles for the right column's subheading */
     right: 60px;
     top: 60px;
   ` : `
-    /* Styles for the left column's subheading */
     left: 60px;
     top: 60px;
   `}
+
+  @media (max-width: 1200px) {
+    font-size: 20px;
+    ${({ $isRight }) => $isRight ? `right: 30px; top: 30px;` : `left: 30px; top: 30px;`}
+  }
+
+  /* Mobile positioning reset */
+  @media (max-width: 992px) {
+    position: static;
+    font-size: 14px;
+    max-width: 150px;
+    text-align: center;
+  }
 `;
 
-/**
- * The main call-to-action button.
- * It uses a pseudo-element (::after) to create a decorative background layer.
- */
 const ActionButton = styled.button`
   width: 268px;
   height: 72px;
   border-radius: 15px;
   border: 1px solid #000;
-  background-color: #3e4cff; // The top, visible button color.
+  background-color: #3e4cff;
   color: black;
   font-family: 'IBM Plex Mono', monospace;
-  top: 80px; // Shift button down.
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
-  position: relative; // Set positioning context for children and pseudo-elements.
-  z-index: 1;         // Ensure the button is above its pseudo-element.
+  position: relative;
+  z-index: 1;
+  
+  /* Desktop-only positioning */
+  top: 80px;
 
-  /* The decorative background layer behind the button */
   &::after {
     content: '';
     position: absolute;
-    top: -8px;        // Position it slightly up and left from the button.
+    top: -8px;
     left: -8px;
     width: 100%;
     height: 100%;
-    background-color: #ddb6fb; // The color of the background layer.
+    background-color: #ddb6fb;
     border-radius: 15px;
     border: 1px solid #000;
-    z-index: -1;      // Place it behind the main button.
+    z-index: -1;
+  }
+
+  @media (max-width: 1200px) {
+    top: 60px;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 992px) {
+    top: 0;
+    width: 160px;
+    height: 50px;
+    font-size: 14px;
   }
 `;
 
-/**
- * A small, decorative tag attached to the ActionButton.
- * Rotated for a playful effect.
- */
 const Tag = styled.span`
   position: absolute;
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 16px;
-  transform: rotate(25.78deg); // Apply rotation.
+  transform: rotate(25.78deg);
   
-  /* Styling for the "It's free!" tag */
   &.free-tag {
     background-color: #FFDAB9;
     top: -10px;
     right: -40px;
   }
 
-  /* Styling for the "New tools!" tag */
   &.new-tools-tag {
     background-color: #FFDAB9;
     top: -22px;
     right: -40px;
   }
+
+  @media (max-width: 992px) {
+    font-size: 10px;
+    padding: 0.2rem 0.5rem;
+    &.free-tag { top: -8px; right: -15px; }
+    &.new-tools-tag { top: -12px; right: -15px; }
+  }
 `;
 
-/**
- * The styled Next.js Image component for the connecting arrow graphics.
- */
 const ConnectingArrowImage = styled(Image)`
-  position: absolute;   // Position relative to the nearest positioned ancestor.
-  pointer-events: none; // Make the image non-interactive.
+  /* Desktop-only positioning */
+  position: absolute;
+  pointer-events: none;
+  &.left-arrow { top: 100px; left: 0px; }
+  &.right-arrow { top: 100px; right: 0px; }
 
-  /* Positioning for the left arrow */
-  &.left-arrow {
-    top: 100px; 
-    left: 0px; 
+   /* Mobile styles */
+   @media (max-width: 992px) {
+    position: static;
+    width: 35px;
+    height: auto;
+
+    &.left-arrow {
+      /* Example: Moves this arrow LEFT by 15px */
+      transform: translateX(-130px); 
+    }
+
+    &.right-arrow {
+      /* Example: Moves this arrow RIGHT by 15px */
+      transform: translateX(120px);
+    }
   }
 
-  /* Positioning for the right arrow */
-  &.right-arrow {
-    top: 100px; 
-    right: 0px; 
-  }
 `;
-
 
 // --- The Hero Section React Component ---
-
-/**
- * The main HeroSection component that assembles all the styled components
- * into a complete, structured UI.
- */
 export default function HeroSection() {
   return (
-    // The main container that holds the three-column layout.
     <HeroContainer>
-      {/* --- LEFT COLUMN --- */}
+      {/* --- DESKTOP LAYOUT --- */}
+      {/* The following 3 components form the desktop view. */}
+      {/* LeftColumn and RightColumn will be hidden on mobile via CSS. */}
+      
       <LeftColumn>
-        {/* The word "Quiet", styled with the Zen Dots font. */}
         <MainHeading className={zenDots.className}>Quiet</MainHeading>
         <Subheading>“A digital dojo for hustlers & grinders”</Subheading>
-        {/* The decorative arrow pointing from the subheading towards the center. */}
         <ConnectingArrowImage
           className="left-arrow"
           src="/Vector 1.png"
@@ -209,16 +289,14 @@ export default function HeroSection() {
           width={71.5}
           height={107.5}
         />
-        {/* The "Join" button with its associated "free" tag. */}
         <ActionButton>
           Join Quiet Room
           <Tag className="free-tag">It's free!</Tag>
         </ActionButton>
       </LeftColumn>
 
-      {/* --- MIDDLE COLUMN (IMAGE) --- */}
+      {/* The HeroImageContainer is used by BOTH layouts. CSS 'order' property re-positions it on mobile. */}
       <HeroImageContainer>
-        {/* The central character image, set to fill its container. */}
         <Image 
           src="/heroimage.png" 
           alt="Character meditating" 
@@ -227,13 +305,9 @@ export default function HeroSection() {
         />
       </HeroImageContainer>
 
-      {/* --- RIGHT COLUMN --- */}
       <RightColumn>
-        {/* The word "Room", styled with the Zen Dots font. */}
         <MainHeading className={zenDots.className}>Room</MainHeading>
-        {/* Subheading with the `$isRight` prop to apply specific positioning. */}
         <Subheading $isRight>“This isn’t school. This is training.”</Subheading>
-        {/* The decorative arrow pointing from the subheading towards the center. */}
         <ConnectingArrowImage
           className="right-arrow"
           src="/Vector 2.png"
@@ -241,12 +315,40 @@ export default function HeroSection() {
           width={71.5}
           height={107.5}
         />
-        {/* The "Explore" button with its associated "new tools" tag. */}
         <ActionButton>
           Explore Features
           <Tag className="new-tools-tag">New tools!</Tag>
         </ActionButton>
       </RightColumn>
+
+      {/* --- MOBILE-ONLY LAYOUT --- */}
+      {/* These components are hidden on desktop and only appear on mobile screens. */}
+
+      <MobileHeadingsContainer>
+        <MainHeading className={zenDots.className}>Quiet</MainHeading>
+        <MainHeading className={zenDots.className}>Room</MainHeading>
+      </MobileHeadingsContainer>
+      
+      <MobileBottomContainer>
+        <MobileGridRow>
+          <Subheading>“A digital dojo for hustlers & grinders”</Subheading>
+          <Subheading $isRight>“This isn’t school. This is training.”</Subheading>
+        </MobileGridRow>
+        <MobileGridRow>
+          <ConnectingArrowImage  className="left-arrow" src="/Vector 1.png" alt="Arrow" width={35} height={52} />
+          <ConnectingArrowImage className="right-arrow" src="/Vector 2.png" alt="Arrow" width={35} height={52} />
+        </MobileGridRow>
+        <MobileGridRow>
+          <ActionButton>
+            Join Quiet Room
+            <Tag className="free-tag">It's free!</Tag>
+          </ActionButton>
+          <ActionButton>
+            Explore Features
+            <Tag className="new-tools-tag">New tools!</Tag>
+          </ActionButton>
+        </MobileGridRow>
+      </MobileBottomContainer>
     </HeroContainer>
   );
 }

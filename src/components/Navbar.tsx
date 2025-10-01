@@ -3,94 +3,122 @@
 
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useState } from 'react';
 
-// --- Styled Components (Our Magic Crayons) ---
+// --- Styled Components ---
 
-// This is the main box that holds everything in the navbar.
 const NavContainer = styled.nav`
-  display: flex; // This makes items sit side-by-side.
-  justify-content: space-between; // Pushes logo/links and button to opposite ends.
-  align-items: center; // Vertically centers everything.
-  padding: 1rem 2rem; // Adds some space inside the box.
-  border: 1px solid #000; // Border width is 1px as per Figma.
-  border-radius: 15px; // Border radius is now 15px as per Figma.
-  background-color: #fff; // A clean white background.
-  /* The margin is adjusted to be 2rem on top/bottom and 1rem on the sides, allowing it to be responsive. */
-  margin: 2rem 1rem; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border: 1px solid #000;
+  border-radius: 15px;
+  background-color: #fff;
+  margin: 2rem 1rem;
+  position: relative;
+  z-index: 20; // Ensure navbar is on top
 
-  /* This creates the subtle dotted background pattern */
   background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
   background-size: 16px 16px;
+
+  // --- Mobile Adjustments ---
+  @media (max-width: 768px) {
+    padding: 1rem;
+    margin: 1rem;
+    // Make navbar transparent on mobile
+    background: transparent;
+    border: none; // Remove the border on mobile
+  }
 `;
 
-// The logo image, with updated dimensions from Figma.
 const LogoImage = styled.img`
   width: 56px;
   height: 53px;
+  z-index: 11;
+
+  @media (max-width: 768px) {
+    width: 48px;
+    height: 45px;
+  }
 `;
 
-// The list that holds our navigation links like Home, About, etc.
-const NavLinks = styled.ul`
-  display: flex; // Makes the links sit side-by-side.
-  flex-grow: 1; // Allows this container to grow and fill the available space.
-  justify-content: center; // Centers the nav items within the container.
-  align-items: center; // Ensures items are vertically aligned.
-  gap: 3rem; // Increased gap for more spacing between nav items.
-  list-style: none; // Removes the default bullet points from the list.
+const NavLinks = styled.ul<{ $isOpen: boolean }>`
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  list-style: none;
   margin: 0;
   padding: 0;
+  transition: transform 0.3s ease-in-out;
+
+  @media (max-width: 768px) {
+    position: fixed; // Changed to fixed to cover the whole screen
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background-color: rgba(255, 255, 255, 0.95); // Slightly transparent white
+    backdrop-filter: blur(10px); // Frosted glass effect
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    transform: ${({ $isOpen }) => $isOpen ? 'translateX(0)' : 'translateX(100%)'};
+    z-index: 10;
+  }
 `;
 
-// This is the styled link itself.
 const StyledLink = styled(Link)<{ $isActive?: boolean }>`
-  /* Text color is now black for active and dark grey for inactive */
   color: ${({ $isActive }) => ($isActive ? '#000' : '#555')};
-  text-decoration: none; // Removes the underline from the link.
+  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem; // Space between the circle and the text.
-  
-  /* Added border, border-radius, and adjusted padding */
+  gap: 0.5rem;
   border: 1.5px solid #000;
   border-radius: 12px;
-  padding: 0.5rem 1.25rem; // Gives space inside the border.
+  padding: 0.5rem 1.25rem;
   transition: color 0.3s ease;
-
-  /* Typography styles from Figma */
   font-family: 'Roboto Mono', monospace;
   font-weight: 400;
   font-size: 24px;
   line-height: 100%;
 
-  /* This is the magic for creating the circle! */
   &::before {
     content: '';
     display: inline-block;
     width: 12px;
     height: 12px;
-    border-radius: 50%; // Makes it a perfect circle.
-    border: 1.5px solid #000; // Border color is now black.
-    background-color: transparent; // Bullet point is transparent by default.
-    transition: background-color 0.3s ease; // Smooth transition for the fill effect.
+    border-radius: 50%;
+    border: 1.5px solid #000;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
   }
 
-  /* On hover, we fill the bullet point with the new purple color */
   &:hover::before {
     background-color: #ddb6fb;
   }
+
+  @media (max-width: 992px) {
+    font-size: 20px;
+    padding: 0.5rem 1rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    padding: 0.75rem 1.5rem;
+  }
 `;
 
-// This is our special "Login" button on the right.
 const LoginButton = styled.button`
-  background-color: #ddb6fb; // The new purple background color.
-  color: #000; // Black text color for better contrast.
-  border: 1.5px solid #000; // Added black border.
-  border-radius: 12px; // Rounded corners.
-  padding: 0.75rem 1.5rem; // Space inside the button.
-  cursor: pointer; // Makes the mouse turn into a pointer on hover.
+  background-color: #ddb6fb;
+  color: #000;
+  border: 1.5px solid #000;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
   transition: opacity 0.3s ease;
-
-  /* Typography styles from Figma */
   font-family: 'Roboto Mono', monospace;
   font-weight: 400;
   font-size: 24px;
@@ -99,45 +127,112 @@ const LoginButton = styled.button`
   &:hover {
     opacity: 0.9;
   }
+
+  @media (max-width: 992px) {
+    font-size: 20px;
+    padding: 0.6rem 1.2rem;
+  }
+  
+  // Adjust login button for mobile view
+  @media (max-width: 768px) {
+    font-size: 16px; // Smaller font
+    padding: 0.5rem 1rem; // Smaller padding
+  }
 `;
 
-// --- The Navbar Component (Putting the Bricks Together) ---
+// NEW: Container for right-side controls on mobile
+const RightNavControls = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem; // Space between login and hamburger
+`;
+
+const HamburgerButton = styled.button<{ $isOpen: boolean }>`
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 11;
+  
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    
+    div {
+      width: 2rem;
+      height: 0.25rem;
+      background: black;
+      border-radius: 10px;
+      transition: all 0.3s linear;
+      position: relative;
+      transform-origin: 1px;
+      
+      :first-child {
+        transform: ${({ $isOpen }) => $isOpen ? 'rotate(45deg)' : 'rotate(0)'};
+      }
+      :nth-child(2) {
+        opacity: ${({ $isOpen }) => $isOpen ? '0' : '1'};
+        transform: ${({ $isOpen }) => $isOpen ? 'translateX(20px)' : 'translateX(0)'};
+      }
+      :nth-child(3) {
+        transform: ${({ $isOpen }) => $isOpen ? 'rotate(-45deg)' : 'rotate(0)'};
+      }
+    }
+  }
+`;
+
+// --- The Navbar Component ---
 
 export default function Navbar() {
-  // For now, we'll pretend "Home" is always the active page.
   const activePath = '/';
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <NavContainer>
       <Link href="/">
-        <LogoImage src="/logo.png" alt="Your Company Logo" />
+        <LogoImage src="/logo.png" alt="Quiet Room Logo" />
       </Link>
-      <NavLinks>
-        <li>
+
+      <NavLinks $isOpen={isMenuOpen}>
+        <li onClick={() => setIsMenuOpen(false)}>
           <StyledLink href="/" $isActive={activePath === '/'}>
             Home
           </StyledLink>
         </li>
-        <li>
+        <li onClick={() => setIsMenuOpen(false)}>
           <StyledLink href="/about" $isActive={activePath === '/'}>
             About
           </StyledLink>
         </li>
-        <li>
+        <li onClick={() => setIsMenuOpen(false)}>
           <StyledLink href="/features" $isActive={activePath === '/'}>
             Features
           </StyledLink>
         </li>
-        <li>
+        <li onClick={() => setIsMenuOpen(false)}>
           <StyledLink href="/contact" $isActive={activePath === '/'}>
             Contact
           </StyledLink>
         </li>
+        {/* The dedicated mobile login link has been removed */}
       </NavLinks>
-      {/* Wrap the button with a Link component to handle navigation */}
-      <Link href="/login">
-        <LoginButton>LogIn</LoginButton>
-      </Link>
+
+      {/* This container will hold the Login and Hamburger on the right */}
+      <RightNavControls>
+        <Link href="/login">
+          <LoginButton>LogIn</LoginButton>
+        </Link>
+        
+        <HamburgerButton $isOpen={isMenuOpen} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <div />
+          <div />
+          <div />
+        </HamburgerButton>
+      </RightNavControls>
     </NavContainer>
   );
 }

@@ -1,4 +1,4 @@
-// src/app/login/page.tsx
+// src/app/signup/page.tsx 
 'use client';
 
 import styled from 'styled-components';
@@ -8,49 +8,88 @@ import Link from 'next/link';
 // --- Shared Gradient Border Style ---
 const RoundedGradientBorder = `
   border-radius: 15px;
-  border: 6px solid transparent; /* thickness of border */
+  border: 6px solid transparent;
   background: 
-    linear-gradient(#fff, #fff) padding-box, /* inner background */
-    linear-gradient(135deg, #E9D5FF, #C084FC) border-box; /* gradient border */
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, #E9D5FF, #C084FC) border-box;
+
+  // Make border thinner on smaller screens
+  @media (max-width: 768px) {
+    border-width: 4px;
+  }
 `;
 
 // --- Styled Components ---
 
-const LoginPageContainer = styled.div`
+const SignupPageContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 100dvh; /* dynamic viewport height */
+  height: 100dvh;
   width: 100%;
-  overflow: hidden; /* prevent scrollbars */
+  overflow: hidden;
+
+  // Switch to a single-column layout on tablets and below
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 5vw; 
-  max-width: 100%; /* prevent overflow */
+  padding: 0 5vw;
+  max-width: 100%;
   box-sizing: border-box;
+  overflow-y: auto; // Allow scrolling on small screens if content overflows
+
+  // Center the form content on larger screens and when the image is hidden
+  @media (max-width: 992px) {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 2rem;
+    height: 100%;
+  }
 `;
 
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* ensure no overflow from image */
+  overflow: hidden;
   background-color: #f0e8ff;
+
+  // Hide the image on tablets and smaller devices
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.h1`
   font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 2.25rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const Subheading = styled.p`
   font-size: 1.5rem;
   margin: 0.5rem 0 3rem 0;
   color: #555;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const Input = styled.input`
@@ -70,6 +109,24 @@ const Input = styled.input`
     font-size: 24px;
     color: #999;
   }
+
+  // Decrease size for tablets
+  @media (max-width: 768px) {
+    height: 60px;
+    font-size: 18px;
+    &::placeholder {
+      font-size: 18px;
+    }
+  }
+
+  // Further decrease size for mobile phones
+  @media (max-width: 480px) {
+    height: 55px;
+    font-size: 16px;
+    &::placeholder {
+      font-size: 16px;
+    }
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -84,6 +141,18 @@ const SubmitButton = styled.button`
   background: 
     linear-gradient(#F3E8FF, #F3E8FF) padding-box,
     linear-gradient(135deg, #E9D5FF, #C084FC) border-box;
+
+  // Adjust size for tablets
+  @media (max-width: 768px) {
+    height: 60px;
+    font-size: 18px;
+  }
+
+  // Adjust size for mobile
+  @media (max-width: 480px) {
+    height: 55px;
+    font-size: 16px;
+  }
 `;
 
 const LoginLinkContainer = styled.div`
@@ -94,6 +163,19 @@ const LoginLinkContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap; // Allow wrapping on medium screens
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  // Stack elements vertically on small mobile screens
+  @media (max-width: 480px) {
+    font-size: 16px;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 `;
 
 const LoginLink = styled(Link)`
@@ -109,13 +191,18 @@ const LoginLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  // Remove margin when stacked vertically
+  @media (max-width: 480px) {
+    margin-left: 0;
+  }
 `;
 
-// --- The Login Page Component ---
-
-export default function LoginPage() {
+// --- The Signup Page Component ---
+// I've renamed the main container to SignupPageContainer for clarity
+export default function SignupPage() {
   return (
-    <LoginPageContainer>
+    <SignupPageContainer>
       <FormContainer>
         <Heading>Ready to Enter the Dojo?</Heading>
         <Subheading>Let's create your Quiet Room pass.</Subheading>
@@ -128,7 +215,7 @@ export default function LoginPage() {
         <SubmitButton>Create Account</SubmitButton>
 
         <LoginLinkContainer>
-          Already have account?
+          Already have an account?
           <LoginLink href="/login">Login &gt;</LoginLink>
         </LoginLinkContainer>
       </FormContainer>
@@ -141,6 +228,6 @@ export default function LoginPage() {
           style={{ objectFit: 'cover' }} 
         />
       </ImageContainer>
-    </LoginPageContainer>
+    </SignupPageContainer>
   );
 }

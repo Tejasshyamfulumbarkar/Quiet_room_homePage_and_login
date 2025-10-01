@@ -6,13 +6,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 // --- Shared Gradient Border Style ---
-// This style is used for inputs and buttons to create a consistent look.
 const RoundedGradientBorder = `
   border-radius: 15px;
   border: 6px solid transparent;
   background: 
     linear-gradient(#fff, #fff) padding-box,
     linear-gradient(135deg, #E9D5FF, #C084FC) border-box;
+
+  // Make border thinner on smaller screens
+  @media (max-width: 768px) {
+    border-width: 4px;
+  }
 `;
 
 // --- Styled Components ---
@@ -24,7 +28,8 @@ const LoginPageContainer = styled.div`
   width: 100%;
   overflow: hidden;
 
-  @media (max-width: 768px) {
+  // Switch to a single-column layout on tablets and below
+  @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -33,9 +38,19 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 5vw;
+  padding: 0 5vw; // Use viewport width for flexible padding
   max-width: 100%; 
   box-sizing: border-box;
+
+  // Center the form content on larger screens and when the image is hidden
+  @media (min-width: 992px) {
+    // No change needed, stays on the left
+  }
+  @media (max-width: 992px) {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 2rem;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -45,7 +60,8 @@ const ImageContainer = styled.div`
   overflow: hidden;
   background-color: #f0e8ff;
 
-   @media (max-width: 768px) {
+  // Hide the image on tablets and smaller devices to save space
+   @media (max-width: 992px) {
     display: none;
   }
 `;
@@ -54,12 +70,27 @@ const Heading = styled.h1`
   font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 2.25rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const Subheading = styled.p`
   font-size: 1.5rem;
   margin: 0.5rem 0 3rem 0;
   color: #555;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const Input = styled.input`
@@ -79,17 +110,41 @@ const Input = styled.input`
     font-size: 24px;
     color: #999;
   }
+
+  // Decrease size for tablets
+  @media (max-width: 768px) {
+    height: 60px;
+    font-size: 18px;
+    &::placeholder {
+      font-size: 18px;
+    }
+  }
+
+  // Further decrease size for mobile phones
+  @media (max-width: 480px) {
+    height: 55px;
+    font-size: 16px;
+    &::placeholder {
+      font-size: 16px;
+    }
+  }
 `;
 
-// NEW: A container for the login button and "Forgot password" link
 const ActionContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
   margin-top: 1rem;
+  flex-wrap: wrap; // Allow items to wrap on smaller screens
+
+  // Stack elements on small mobile screens for better readability
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 `;
 
-// UPDATED: This button is for logging in. The background matches the image.
 const LoginButton = styled.button`
   ${RoundedGradientBorder}
   padding: 0 3rem;
@@ -101,30 +156,59 @@ const LoginButton = styled.button`
   background: 
     linear-gradient(#F3E8FF, #F3E8FF) padding-box,
     linear-gradient(135deg, #E9D5FF, #C084FC) border-box;
+  
+  // Decrease size for tablets
+  @media (max-width: 768px) {
+    height: 60px;
+    font-size: 18px;
+    padding: 0 2rem;
+  }
+  
+  // Further decrease size for mobile phones
+  @media (max-width: 480px) {
+    width: 100%; // Make button full-width for a better mobile UX
+    height: 55px;
+    font-size: 16px;
+  }
 `;
 
-// NEW: Styled link for the "Forgot your password?" text
 const ForgotPasswordLink = styled(Link)`
   font-size: 1rem;
-  color: #8B5CF6; /* A matching purple color */
+  color: #8B5CF6; 
   text-decoration: none;
   font-weight: 500;
 
   &:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
-// UPDATED: Container for the "Create Account" section
 const CreateAccountContainer = styled.div`
   margin-top: 2rem;
   font-size: 24px;
   color: #6B7280;
   display: flex;
   align-items: center;
+  flex-wrap: wrap; // Allow items to wrap
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px;
+    flex-direction: column; // Stack text and button vertically
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 3rem;
+  }
 `;
 
-// UPDATED: The link-styled button for creating an account
 const CreateAccountLink = styled(Link)`
   ${RoundedGradientBorder}
   font-weight: bold;
@@ -132,27 +216,27 @@ const CreateAccountLink = styled(Link)`
   margin-left: 1rem;
   color: #333;
   padding: 0.5rem 1.5rem;
-  /* The white background inside the gradient border gives it the "outline" look */
   background: 
     linear-gradient(#fff, #fff) padding-box,
     linear-gradient(135deg, #E9D5FF, #C084FC) border-box;
+  
+  @media (max-width: 480px) {
+    margin-left: 0; // Remove left margin when stacked
+  }
 `;
 
 // --- The Login Page Component ---
-
+// (No changes needed in the JSX, all adjustments are in the styles)
 export default function LoginPage() {
   return (
     <LoginPageContainer>
       <FormContainer>
-        {/* UPDATED: Text changed to match the login page image */}
         <Heading>Welcome Back, Warrior</Heading>
         <Subheading>Your dojo awaits.</Subheading>
 
-        {/* UPDATED: Removed name and confirm password fields */}
         <Input type="email" placeholder="Email" />
         <Input type="password" placeholder="Password" />
 
-        {/* UPDATED: New layout for the primary action buttons/links */}
         <ActionContainer>
           <LoginButton>Login</LoginButton>
           <ForgotPasswordLink href="/forgot-password">
@@ -160,9 +244,8 @@ export default function LoginPage() {
           </ForgotPasswordLink>
         </ActionContainer>
         
-        {/* UPDATED: Text and link now direct users to the signup page */}
         <CreateAccountContainer>
-          Don't have account?
+          Don't have an account?
           <CreateAccountLink href="/signup">Create Account &gt;</CreateAccountLink>
         </CreateAccountContainer>
       </FormContainer>
