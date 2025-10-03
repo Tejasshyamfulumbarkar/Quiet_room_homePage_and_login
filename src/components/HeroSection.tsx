@@ -1,5 +1,5 @@
 // src/components/HeroSection.tsx
-'use an client';
+'use client';
 
 // --- Dependency Imports ---
 import styled from 'styled-components';
@@ -20,26 +20,33 @@ const HeroContainer = styled.section`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  gap: 2rem;
   position: relative;
   flex-grow: 1;
-  width: 100%;
-  max-width: 1600px;
   margin: 0 auto;
   overflow-x: hidden;
+  width: 95vw;
+  max-width: 1600px; 
+  gap: clamp(1rem, 2vw, 2rem);
+  
+  /* FIX: Hides any content that overflows vertically, removing the scrollbar */
+  overflow-y: hidden;
 
-  // --- Mobile Responsiveness ---
-  @media (max-width: 992px) {
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 2rem 1rem;
+  @media (max-width: 1250px) {
     gap: 0;
-    min-height: 100dvh;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    /* FIX: Better vertical alignment and adaptive height */
+    justify-content: space-evenly; 
+    padding: 1rem;
+    gap: 0;
+    width: 100%; 
+    /* The flex-grow: 1 property will handle filling the space */
   }
 `;
 
 // --- DESKTOP-ONLY COMPONENTS ---
-// Hide the original columns on mobile
 const LeftColumn = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,8 +55,10 @@ const LeftColumn = styled.div`
   gap: 1.5rem;
   position: relative;
   bottom: 60px;
+  flex: 1;
+  min-width: 0;
 
-  @media (max-width: 992px) {
+  @media (max-width: 1024px) {
     display: none;
   }
 `;
@@ -62,83 +71,117 @@ const RightColumn = styled.div`
   gap: 1.5rem;
   position: relative;
   bottom: 60px;
+  flex: 1;
+  min-width: 0;
 
-  @media (max-width: 992px) {
+  @media (max-width: 1024px) {
     display: none;
   }
 `;
 
 // --- MOBILE-ONLY COMPONENTS ---
-// Container for "Quiet Room" heading on mobile
 const MobileHeadingsContainer = styled.div`
-  display: none; // Hidden on desktop
-  @media (max-width: 992px) {
+  display: none; 
+  @media (max-width: 1024px) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    order: 1; // Appears first
+    order: 1;
   }
 `;
 
-// Container for the bottom section on mobile
 const MobileBottomContainer = styled.div`
-  display: none; // Hidden on desktop
-  @media (max-width: 992px) {
+  display: none;
+  @media (max-width: 1024px) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    order: 3; // Appears last
-    gap: 1.5rem;
+    order: 3;
+    gap: 1.25rem;
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 0;
   }
 `;
 
-// Rows for the 2-column grid layout on mobile
 const MobileGridRow = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
   width: 100%;
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+  }
+
+  @media (max-width: 360px) {
+    &:last-child {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+`;
+
+const ArrowGridRow = styled(MobileGridRow)`
+  width: 90%;
+  max-width: 400px; 
+  justify-content: space-between;
 `;
 
 
-// --- SHARED COMPONENTS (STYLED FOR BOTH DESKTOP & MOBILE) ---
+// --- SHARED COMPONENTS ---
 
 const HeroImageContainer = styled.div`
-  width: 711px;
-  height: 711px;
   position: relative;
+  width: 40%;
+  max-width: 711px;
+  height: auto;
+  aspect-ratio: 1 / 1;
 
-  @media (max-width: 1200px) {
-    width: 500px;
-    height: 500px;
+  @media (max-width: 1024px) {
+    order: 2;
+    width: 50%;
+    max-width: 350px;
+    margin: 1.5rem 0;
   }
-
-  @media (max-width: 992px) {
-    order: 2; // Image is in the middle on mobile
-    width: 70%;
-    max-width: 300px;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    margin: 2rem 0;
+  
+  @media (max-width: 768px) {
+    max-width: 240px;
+    margin: 1rem 0;
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 220px;
   }
 `;
 
 const MainHeading = styled.h1`
-  font-size: 100px;
   line-height: 1;
   margin: 0;
+  font-size: 100px;
 
-  @media (max-width: 1200px) {
-    font-size: 72px;
+  @media (max-width: 1440px) {
+    font-size: 84px;
   }
-  @media (max-width: 992px) {
+
+  @media (max-width: 1250px) {
+    font-size: 60px;
+  }
+
+  @media (max-width: 1024px) {
     font-size: 64px;
   }
+
+  @media (max-width: 768px) {
+    font-size: 56px;
+  }
+
   @media (max-width: 480px) {
-    font-size: 52px;
+    font-size: 48px;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 40px;
   }
 `;
 
@@ -149,28 +192,33 @@ const Subheading = styled.p<{ $isRight?: boolean }>`
   line-height: 1.2;
   max-width: 300px;
   margin: 0;
-
-  /* Desktop-only positioning */
   position: relative;
-  ${({ $isRight }) => $isRight ? `
-    right: 60px;
-    top: 60px;
-  ` : `
-    left: 60px;
-    top: 60px;
-  `}
+  top: 60px;
+  transform: ${({ $isRight }) => $isRight ? 'translateX(-60px)' : 'translateX(60px)'};
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1440px) {
     font-size: 20px;
-    ${({ $isRight }) => $isRight ? `right: 30px; top: 30px;` : `left: 30px; top: 30px;`}
+    top: 30px;
+    transform: ${({ $isRight }) => $isRight ? 'translateX(-30px)' : 'translateX(30px)'};
   }
 
-  /* Mobile positioning reset */
-  @media (max-width: 992px) {
+  @media (max-width: 1250px) {
+    transform: none;
+    font-size: 16px;
+    top: 20px;
+  }
+
+  @media (max-width: 1024px) {
     position: static;
+    top: 0;
     font-size: 14px;
     max-width: 150px;
     text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    max-width: 120px;
   }
 `;
 
@@ -187,8 +235,6 @@ const ActionButton = styled.button`
   cursor: pointer;
   position: relative;
   z-index: 1;
-  
-  /* Desktop-only positioning */
   top: 80px;
 
   &::after {
@@ -204,16 +250,31 @@ const ActionButton = styled.button`
     z-index: -1;
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1440px) {
     top: 60px;
+    width: 220px;
+    height: 60px;
+    font-size: 18px;
+  }
+  
+  @media (max-width: 1250px) {
+    width: 180px;
+    height: 50px;
+    font-size: 16px;
+    top: 40px;
   }
 
-  /* Mobile styles */
-  @media (max-width: 992px) {
+  @media (max-width: 1024px) {
     top: 0;
     width: 160px;
     height: 50px;
     font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    width: 140px;
+    height: 45px;
+    font-size: 12px;
   }
 `;
 
@@ -237,38 +298,43 @@ const Tag = styled.span`
     right: -40px;
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: 1024px) {
     font-size: 10px;
     padding: 0.2rem 0.5rem;
     &.free-tag { top: -8px; right: -15px; }
     &.new-tools-tag { top: -12px; right: -15px; }
   }
+
+  @media (max-width: 480px) {
+    font-size: 9px;
+  }
 `;
 
 const ConnectingArrowImage = styled(Image)`
-  /* Desktop-only positioning */
   position: absolute;
   pointer-events: none;
   &.left-arrow { top: 100px; left: 0px; }
   &.right-arrow { top: 100px; right: 0px; }
 
-   /* Mobile styles */
-   @media (max-width: 992px) {
-    position: static;
-    width: 35px;
-    height: auto;
-
-    &.left-arrow {
-      /* Example: Moves this arrow LEFT by 15px */
-      transform: translateX(-130px); 
-    }
-
-    &.right-arrow {
-      /* Example: Moves this arrow RIGHT by 15px */
-      transform: translateX(120px);
+  @media (max-width: 1250px) {
+    &.left-arrow, &.right-arrow {
+      width: 55px;
+      height: auto;
+      top: 70px;
     }
   }
 
+   @media (max-width: 1024px) {
+    &.left-arrow, &.right-arrow {
+      position: static;
+      width: 35px;
+      height: auto;
+    }
+  }
+
+  @media (max-width: 360px) {
+    display: none;
+  }
 `;
 
 // --- The Hero Section React Component ---
@@ -276,9 +342,6 @@ export default function HeroSection() {
   return (
     <HeroContainer>
       {/* --- DESKTOP LAYOUT --- */}
-      {/* The following 3 components form the desktop view. */}
-      {/* LeftColumn and RightColumn will be hidden on mobile via CSS. */}
-      
       <LeftColumn>
         <MainHeading className={zenDots.className}>Quiet</MainHeading>
         <Subheading>“A digital dojo for hustlers & grinders”</Subheading>
@@ -295,7 +358,6 @@ export default function HeroSection() {
         </ActionButton>
       </LeftColumn>
 
-      {/* The HeroImageContainer is used by BOTH layouts. CSS 'order' property re-positions it on mobile. */}
       <HeroImageContainer>
         <Image 
           src="/heroimage.png" 
@@ -321,9 +383,7 @@ export default function HeroSection() {
         </ActionButton>
       </RightColumn>
 
-      {/* --- MOBILE-ONLY LAYOUT --- */}
-      {/* These components are hidden on desktop and only appear on mobile screens. */}
-
+      {/* --- MOBILE/TABLET LAYOUT (Activates at 1024px) --- */}
       <MobileHeadingsContainer>
         <MainHeading className={zenDots.className}>Quiet</MainHeading>
         <MainHeading className={zenDots.className}>Room</MainHeading>
@@ -334,10 +394,10 @@ export default function HeroSection() {
           <Subheading>“A digital dojo for hustlers & grinders”</Subheading>
           <Subheading $isRight>“This isn’t school. This is training.”</Subheading>
         </MobileGridRow>
-        <MobileGridRow>
+        <ArrowGridRow>
           <ConnectingArrowImage  className="left-arrow" src="/Vector 1.png" alt="Arrow" width={35} height={52} />
           <ConnectingArrowImage className="right-arrow" src="/Vector 2.png" alt="Arrow" width={35} height={52} />
-        </MobileGridRow>
+        </ArrowGridRow>
         <MobileGridRow>
           <ActionButton>
             Join Quiet Room

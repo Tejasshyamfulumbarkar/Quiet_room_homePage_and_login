@@ -15,20 +15,24 @@ const NavContainer = styled.nav`
   border: 1px solid #000;
   border-radius: 15px;
   background-color: #fff;
-  margin: 2rem 1rem;
+  margin: 2rem;
   position: relative;
-  z-index: 20; // Ensure navbar is on top
+  z-index: 20;
 
   background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
   background-size: 16px 16px;
 
-  // --- Mobile Adjustments ---
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
+    padding: 1rem 1.5rem;
+    margin: 1.5rem;
+  }
+
+  /* --- Breakpoint for switching to mobile view --- */
+  @media (max-width: 900px) {
     padding: 1rem;
     margin: 1rem;
-    // Make navbar transparent on mobile
     background: transparent;
-    border: none; // Remove the border on mobile
+    border: none;
   }
 `;
 
@@ -37,7 +41,12 @@ const LogoImage = styled.img`
   height: 53px;
   z-index: 11;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
+    width: 52px;
+    height: 49px;
+  }
+
+  @media (max-width: 900px) {
     width: 48px;
     height: 45px;
   }
@@ -54,18 +63,27 @@ const NavLinks = styled.ul<{ $isOpen: boolean }>`
   padding: 0;
   transition: transform 0.3s ease-in-out;
 
-  @media (max-width: 768px) {
-    position: fixed; // Changed to fixed to cover the whole screen
+  @media (max-width: 1200px) {
+    gap: 2rem;
+  }
+
+  @media (max-width: 992px) {
+    gap: 1.5rem;
+  }
+
+  /* --- Breakpoint for switching to mobile view --- */
+  @media (max-width: 900px) {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100dvh;
-    background-color: rgba(255, 255, 255, 0.95); // Slightly transparent white
-    backdrop-filter: blur(10px); // Frosted glass effect
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
-    transform: ${({ $isOpen }) => $isOpen ? 'translateX(0)' : 'translateX(100%)'};
+    transform: ${({ $isOpen }) => ($isOpen ? 'translateX(0)' : 'translateX(100%)')};
     z-index: 10;
   }
 `;
@@ -100,14 +118,26 @@ const StyledLink = styled(Link)<{ $isActive?: boolean }>`
     background-color: #ddb6fb;
   }
 
+  @media (max-width: 1200px) {
+    font-size: 22px;
+  }
+
   @media (max-width: 992px) {
     font-size: 20px;
     padding: 0.5rem 1rem;
   }
 
-  @media (max-width: 768px) {
+  /* --- Breakpoint for switching to mobile view --- */
+  @media (max-width: 900px) {
+    /* Font size increases for the spacious mobile overlay */
     font-size: 24px;
     padding: 0.75rem 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    /* Font size inside the menu is reduced for small screens */
+    font-size: 20px;
+    padding: 0.6rem 1.2rem;
   }
 `;
 
@@ -128,23 +158,35 @@ const LoginButton = styled.button`
     opacity: 0.9;
   }
 
+  @media (max-width: 1200px) {
+    font-size: 22px;
+  }
+
   @media (max-width: 992px) {
     font-size: 20px;
     padding: 0.6rem 1.2rem;
   }
   
-  // Adjust login button for mobile view
-  @media (max-width: 768px) {
-    font-size: 16px; // Smaller font
-    padding: 0.5rem 1rem; // Smaller padding
+  /* --- Breakpoint for switching to mobile view --- */
+  @media (max-width: 900px) {
+    font-size: 16px;
+    padding: 0.5rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 0.4rem 0.8rem;
   }
 `;
 
-// NEW: Container for right-side controls on mobile
 const RightNavControls = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem; // Space between login and hamburger
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+      gap: 0.5rem;
+  }
 `;
 
 const HamburgerButton = styled.button<{ $isOpen: boolean }>`
@@ -154,7 +196,8 @@ const HamburgerButton = styled.button<{ $isOpen: boolean }>`
   cursor: pointer;
   z-index: 11;
   
-  @media (max-width: 768px) {
+  /* --- Breakpoint for switching to mobile view --- */
+  @media (max-width: 900px) {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -172,14 +215,14 @@ const HamburgerButton = styled.button<{ $isOpen: boolean }>`
       transform-origin: 1px;
       
       :first-child {
-        transform: ${({ $isOpen }) => $isOpen ? 'rotate(45deg)' : 'rotate(0)'};
+        transform: ${({ $isOpen }) => ($isOpen ? 'rotate(45deg)' : 'rotate(0)')};
       }
       :nth-child(2) {
-        opacity: ${({ $isOpen }) => $isOpen ? '0' : '1'};
-        transform: ${({ $isOpen }) => $isOpen ? 'translateX(20px)' : 'translateX(0)'};
+        opacity: ${({ $isOpen }) => ($isOpen ? '0' : '1')};
+        transform: ${({ $isOpen }) => ($isOpen ? 'translateX(20px)' : 'translateX(0)')};
       }
       :nth-child(3) {
-        transform: ${({ $isOpen }) => $isOpen ? 'rotate(-45deg)' : 'rotate(0)'};
+        transform: ${({ $isOpen }) => ($isOpen ? 'rotate(-45deg)' : 'rotate(0)')};
       }
     }
   }
@@ -218,10 +261,8 @@ export default function Navbar() {
             Contact
           </StyledLink>
         </li>
-        {/* The dedicated mobile login link has been removed */}
       </NavLinks>
 
-      {/* This container will hold the Login and Hamburger on the right */}
       <RightNavControls>
         <Link href="/login">
           <LoginButton>LogIn</LoginButton>
