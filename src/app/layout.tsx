@@ -2,12 +2,19 @@
 
 import StyledComponentsRegistry from '@/lib/registry';
 import type { Metadata } from 'next';
-import { Roboto_Mono } from 'next/font/google';
-import GlobalStyles from '@/components/ui/GlobalStyles'; // <-- Import GlobalStyles
+// 1. Import Poppins alongside your existing font
+import { Roboto_Mono, Poppins } from 'next/font/google';
+import GlobalStyles from '@/components/ui/GlobalStyles';
 
 const robotoMono = Roboto_Mono({
   subsets: ['latin'],
   weight: ['400'],
+});
+
+// 2. Instantiate the Poppins font with the semi-bold weight (600)
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['600'],
 });
 
 export const metadata: Metadata = {
@@ -25,9 +32,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={robotoMono.className}>
+      {/* 3. Add the new poppins class name to the body tag */}
+      <body className={`${robotoMono.className} ${poppins.className}`}>
         <StyledComponentsRegistry>
-          <GlobalStyles /> {/* <-- Add the component here */}
+          <GlobalStyles />
           {children}
         </StyledComponentsRegistry>
       </body>

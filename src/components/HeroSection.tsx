@@ -363,7 +363,7 @@ export default function HeroSection() {
           src="/heroimage.png" 
           alt="Character meditating" 
           layout="fill" 
-          objectFit="contain" 
+        
         />
       </HeroImageContainer>
 
